@@ -1,0 +1,13 @@
+black
+fastapi
+flake8
+isort
+loguru
+mkdocs
+pandas
+pip
+pydantic
+python-dotenv
+tqdm
+typer
+-e .
