@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>PV Selbsverbrauch Rechner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="table.css"> -->
+    <style>
+    html,body,h1,h2,h3,h4 {font-family:"Lato", sans-serif}
+    .mySlides {display:none}
+    .w3-tag, .fa {cursor:pointer}
+    .w3-tag {height:15px;width:15px;padding:0;margin-top:6px}
+    </style>
+</head>
+<body>
+
+    <div class="w3-top">
+        <div class="w3-row w3-large w3-light-grey">
+          <div class="w3-col s4">
+            <a href="#" class="w3-button w3-block">Rechner</a>
+          </div>
+          <div class="w3-col s4">
+            <a href="#about" class="w3-button w3-block">Über</a>
+          </div>
+          <div class="w3-col s4">
+            <a href="#contact" class="w3-button w3-block">Kontakt</a>
+          </div>
+        </div>
+    </div>
+
+    <div class="w3-content" style="max-width:2000px;margin-top:46px">
+        <div class="w3-panel">
+            <h1>PV Selbsverbrauch Rechner</h1>
+            <p>Mit diesem Tool kannst du einfach abschätzen, wie hoch dein PV-Eigenverbrauch sein wird. Wähle dazu aus passenden Verbrauchsprofilen aus und konfiguriere deine PV-Anlage(n).</p>
+        </div>
+
+        <hr>
+
+        <div class="w3-panel">
+            <h2>Konfiguration</h2>
+            <h3>Verbrauchsprofil</h3>
+            <p>
+                Verbrauchsprofil:
+                <br>
+                <select id="profile">
+                    <option value="Haushalt">Haushalt</option>
+                    <option value="Gastgewerbe">Gastgewerbe</option>
+                    <option value="Bla">Bla</option>
+                </select>
+                <br>
+                <small>
+                    Nach Standardlastprofile, 
+                    <a href="https://www.bdew.de/energie/standardlastprofile-strom/" >BDEW</a>
+                </small>
+
+                <br>
+                Jahresverbrauch in kWh
+                <br>
+                <input type="number" id="annual_consumption" min="0" placeholder="Verbrauchswert eingeben">
+            </p>
+            <button type="button">Weiteres Verbrauchsprofil hinzufügen</button>
+        </div>
+
+        <div class="w3-panel">
+            <h3>PV-Anlage</h3>
+            <p id="PvSystem">
+                Installierte Leistung in kWp:
+                <br>
+                <input type="number" id="capacity" min="0" placeholder="Leistung eingeben">
+                <br>
+                <!--Adresse:
+                <input type="text" id="address" placeholder="Adresse eingeben">
+                <br>
+                -->
+                Koordinaten:
+                <br>
+                <input type="text" id="latitute" placeholder="Breitengrad eingeben">
+                °N
+                <input type="text" id="longitude" placeholder="Längengrad eingeben">
+                °E
+                <br>
+                Neigungswinkel in °:
+                <br>
+                <input type="number" id="tilt" min="0" max="90" placeholder="Neigungswinkel eingeben">
+                <br>
+                <small>0° = flach auf dem Dach, 90° = senkrecht</small>
+                <br>
+                Ausrichtung in °:
+                <br>
+                <input type="number" id="azimutz" placeholder="Ausrichtung eingeben">
+                <br>
+                <small>0° = Süden, 90° = Osten, 180° = Norden, 270° = Westen</small>
+            </p>
+            <button type="button">Weiteres PV-Anlage hinzufügen</button>
+        </div>
+
+        <hr>
+        <div class="w3-panel">
+            <h2>Ergebnis</h2>
+            <button type="button">Berechnen</button>
+            <h3>Verbrauch</h3>
+            <h3>PV-Erzeugung</h3>
+            <h3>PV-Eigenverbrauch</h3>
+            <h3>Interaktiver Plot</h3>
+        </div>
+    </div>
+
+
+</body>
+</html>
