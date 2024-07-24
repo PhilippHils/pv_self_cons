@@ -1,6 +1,7 @@
 black
 fastapi
 flake8
+flit
 isort
 loguru
 mkdocs
