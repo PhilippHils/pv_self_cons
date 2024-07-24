@@ -1,11 +1,13 @@
 black
 fastapi
 flake8
+flit
 isort
 loguru
 mkdocs
 pandas
 pip
+plotly
 pydantic
 pytest
 python-dotenv

@@ -5,17 +5,19 @@ import json
 import requests
 import pandas as pd
 
-from .schemas import PvSystem
+from pv_self_cons.schemas import PvSystem
+from pv_self_cons.helpers import get_index
 
 
 def get_pv_prod(pvsystem: PvSystem) -> pd.Series:
-    year_simulation = int(os.getenv("year_simulation"))
+    year_simulation: str | None = os.getenv("year_simulation")
+    assert year_simulation is not None, "Environment variable 'year_simulation' is not set."
 
     args = {
         'lat': pvsystem.latitude,
         'lon': pvsystem.longitude,
-        'date_from': str(year_simulation) + '-01-01',
-        'date_to': str(year_simulation + 1) + '-01-01',
+        'date_from': year_simulation + '-01-01',
+        'date_to': str(int(year_simulation) + 1) + '-01-01',
         'dataset': 'merra2',
         'capacity': 1.0,                                                                              # capacity set to 1 to generate capacity factor units
         'system_loss': 0.1,
@@ -26,7 +28,8 @@ def get_pv_prod(pvsystem: PvSystem) -> pd.Series:
     }
 
     url = 'https://www.renewables.ninja/api/data/pv'
-    token: str = os.getenv("renewables_ninja_token")
+    token: str | None = os.getenv("renewables_ninja_token")
+    assert token is not None, "Environment variable 'renewables_ninja_token' is not set."
 
     s = requests.session()
     s.headers = {'Authorization': 'Token ' + token}
@@ -43,6 +46,7 @@ def get_pv_prod(pvsystem: PvSystem) -> pd.Series:
     ).squeeze()
 
     production = production_raw.resample('15min').interpolate() / 4
-    production = production.loc[production.index.year == year_simulation]
+    production.index = production.index.tz_localize(parsed_response['metadata']['units']['time']).tz_convert('UTC')
+    index = get_index()
 
-    return production
+    return production.loc[index]

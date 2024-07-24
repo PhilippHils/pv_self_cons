@@ -2,22 +2,17 @@ import os
 
 import pandas as pd
 
-from .schemas import Consumer
+from pv_self_cons.schemas import Consumer
+from pv_self_cons.helpers import get_index
 
 
 def get_consumption(consumer: Consumer) -> pd.Series:
     """Create a consumption profile for a consumer based on the VDEW data."""
-    # create index
-    year_simulation = os.getenv("year_simulation")
-    index = pd.date_range(
-        start=f"{year_simulation}-01-01",
-        end=f"{year_simulation}-12-31T23:45",
-        freq='15min',
-        tz='Europe/Berlin'
-    )
+    index = get_index()
 
     # create consumption profile from VDEW data
-    path_consumption_profile_xls = os.getenv("path_consumption_profile_xls")
+    path_consumption_profile_xls: str | None = os.getenv("path_consumption_profile_xls")
+    assert path_consumption_profile_xls is not None, "Environment variable 'path_consumption_profile_xls' is not set."
     consumption: pd.Series = _create_consumption_profile(path_consumption_profile_xls, index, consumer.profile)
 
     # scale to yearly value
@@ -36,12 +31,14 @@ def _create_consumption_profile(path_consumption_profile_xls: str, index: pd.Dat
         index_col=0
     )[:-1].sort_index()
 
+    index_local_time = index.tz_convert('Europe/Berlin')
+
     season = ['Winter' if m in [12, 1, 2] else 'Sommer' if m in [6, 7, 8] else 'Übergangszeit' for m in index.month]
     day_type = ['Samstag' if d == 5 else 'Sonntag' if d == 6 else 'Werktag' for d in index.dayofweek]
 
     consumption = pd.Series(
         index=index,
-        data=[consumption_raw.loc[time, (s, d)] for time, s, d in zip(index.time, season, day_type)]
+        data=[consumption_raw.loc[time, (s, d)] for time, s, d in zip(index_local_time.time, season, day_type)]
     )
 
     return consumption
